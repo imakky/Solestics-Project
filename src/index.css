@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.centered-container {
+  @apply mx-auto max-w-screen-xl px-5 md:px-14;
+}
+
+.section {
+  @apply mt-8 mb-16;
+}
+
+.primary-cta {
+  @apply bg-sky-500 hover:bg-sky-600;
+}
+
+.secondary-cta {
+  @apply bg-sky-700 hover:bg-sky-800;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url(./assets/fonts/Sora-VariableFont_wght.ttf);
+}
+
+.slick-dots li button:before {
+  color: #f85e00 !important;
+}

@@ -1,92 +1,122 @@
-# Solestics-Project
+# SITE-STARTER-REACT-BASIC
+
+This repository provides a basic example of how to start developing a React site on the Yext Pages system.
+
+## Getting Started
+
+### Prerequisites
+
+1. Have the Yext CLI installed: https://hitchhikers.yext.com/guides/cli-getting-started-resources/01-install-cli/
+1. Have Deno installed, version 1.21.0 or later: https://deno.land/manual/getting_started/installation
+1. Have node installed, version 17 or later: https://nodejs.org/en/download/
+
+   - It's recommend to use nvm: https://github.com/nvm-sh/nvm#installing-and-updating or via brew `brew install nvm`
+
+1. Optional: Have a Yext account (necessary for production builds, deploying on Yext Pages, and pulling local stream document data via `yext pages generate-test-data`). This starter already comes with some localData that can be used for local dev without the need to init with a Yext account.
 
 
+### Clone this repo and install dependencies
 
-## Getting started
+```shell
+git clone https://github.com/yext/pages-starter-react-locations
+cd pages-starter-react-locations
+npm install
+```
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Useful commands
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+`yext init` - Authenticates the Yext CLI with your Yext account
 
-## Add your files
+`npm run dev` - runs your code against a local dev server using Vite
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- All stream documents come from the `localData` folder
+- You can visit either of these urls out of the box
+  - http://localhost:3000/index/123
+  - http://localhost:3000/static
+
+`npm run dev -- dynamic` - same as above except instead of using files from `localData` it will pull the document from Yext on the fly
+
+`yext pages generate-test-data` - pull an example set of `localData` from your account
+
+`yext pages build` - Runs a production build against your `localData`
+
+`yext pages serve` - Runs a local server against your production-built files
+
+- It's recommended to `yext pages build` followed by `yext pages serve` before committing in order to test that a real production build won't have any issues. In practice, development builds (via `npm run dev`) and production builds compile and bundle assets differently. For local development, ES Modules are loaded directly by the browser, allowing fast iteration during local development and also allows for hot module replacement (HMR). Other things like CSS are also loaded directly by the browser, including linking to sourcemaps. During a production build all of the different files are compiled (via ESBuild for jsx/tsx) and minified, creating assets as small as possible so that the final html files load quickly when served to a user.
+
+`npm run fmt` - Automatically formats all code
+
+`npm run lint` - Run ESLint to check for errors and warnings
+
+## Repository Layout
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/vermavansh42/solestics-project.git
-git branch -M main
-git push -uf origin main
+root
+└───localData
+└───sites-config
+│   │   ci.json
+└───src
+│   │   index.css
+│   │
+│   └───components
+│   │
+│   └───templates
+│       │   index.tsx
+│       │   static.tsx
+│   │
+│   └───types
 ```
 
-## Integrate with your tools
+### localData
 
-- [ ] [Set up project integrations](https://gitlab.com/vermavansh42/solestics-project/-/settings/integrations)
+Contains example stream documents that are used while local developing. By default this repo contains example files that work with the provided example templates. You can generate real stream documents specific to your Yext account via `yext pages generate-test-data`.
 
-## Collaborate with your team
+NOTE: You normally wouldn't want to check in the localData folder as it's only used for local dev. It is gitignored by default.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### sites-config
 
-## Test and Deploy
+Contains a single `ci.json` file. This file defines how the Yext CI system will build your project. It is not used during local dev. However, it is used when running a local production build (i.e. `yext pages build`).
 
-Use the built-in continuous integration in GitLab.
+NOTE: A `features.json` file will automatically be generated during CI build for you based on the `config`s defined in your templates. One has been checked in to this repo so that `yext pages generate-test-data` works out of the box (assuming you've `yext init`'ed with your Yext account). If this file doesn't exist then `yext pages build` will implicitly generate a new one when it calls `npm run directbuild` (defined in `sites-config/ci.json`).
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### src
 
-***
+#### components
 
-# Editing this README
+This is where all of your custom components _may_ live. This folder is not required and you can set up your own custom folder structure for your own components in any way you'd like, as long as it lives in the `src` directory.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+#### templates
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Required. This is where your actual templates live. There are effectively two types of components:
 
-## Name
-Choose a self-explaining name for your project.
+1. stream-based templates: those that have an exported `config`
+1. static templates: those that don't have an exported `config`. Furthermore, they may also export a `getStaticProps` function if external data is required.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+NOTE: It's not currently possible to generate multiple html files using a static template, even if `getStaticProps` returns arrayed data.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+#### types
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Here you can define any custom TypeScript types you need.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+#### index.css
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Not required. In this example this sets up Tailwind CSS.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### vite.config.js
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Vite is now a first class member of the starter! This file defines any custom Vite configuration you want, giving you full control over your setup. Specifically, it will allows users to pass additional configuration options to the vite-plugin-yext-sites-ssg plugin when they become more widely available.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Everything else
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+The rest of the files are basic config setup common to many other React projects. In this example we've enabled:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+1. Tailwind CSS (which leverages PostCSS) - used for easy styling
+1. ESLint - catches errors in your code
+1. Prettier - formats your code (you can add .prettierrc to override any default settings)
+1. TypeScript - adds typing to Javascript for a better developer experience
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Temporary Changes / Additional Notes
 
-## License
-For open source projects, say how it is licensed.
+### .npmrc
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This file is necessary while this repository is private. You will need to add an environment variable called `NPM_TOKEN` in your branch settings in the Yext Pages UI. You can create the token via the https://npmjs.org 'Access Tokens' section. You will also need to export `NPM_TOKEN` in ~/.bash_profile locally as well (`npm login` doesn't seem to work when this file exists in the repo).
